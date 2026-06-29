@@ -419,9 +419,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
     margin-bottom: 14px;
-    padding-top: 4px;
+    padding-top: 6px;
   }
   .edu-card-icon {
     font-size: 32px;
@@ -998,7 +998,7 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
     blocks.push({
       icon: '📈',
       title: 'Step by step — 100 kcal à la fois',
-      text: 'Commence avec <strong>+100 kcal par semaine</strong> au-dessus de ton maintien et monte progressivement. Aller trop vite, c\'est accumuler du gras inutile. La prise de muscle demande de la patience — elle ne se fait pas en 3 semaines.'
+      text: 'Commence avec <strong>+100 kcal par semaine</strong> au-dessus de ton maintien et monte progressivement. Aller trop vite, c\'est accumuler du gras. La prise de muscle demande de la patience — elle ne se fait pas en 3 semaines.'
     });
     blocks.push({
       icon: '⚖️',
@@ -1008,7 +1008,7 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
     blocks.push({
       icon: '🏃',
       title: 'Le cardio n\'est pas ton ennemi',
-      text: 'Même en prise de muscle, le cardio reste important. Ton cœur est ta pompe — prends-en soin. Les habitudes que tu bâtis maintenant seront ancrées et plus simples à maintenir en déficit plus tard. Ne le supprime pas.'
+      text: 'Même en prise de muscle, le cardio reste important. Ton cœur est ta pompe — prends-en soin. Les habitudes bâties maintenant seront plus simples à maintenir en déficit. Ne le supprime pas.'
     });
     blocks.push({
       icon: '💪',
@@ -1033,13 +1033,13 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
   blocks.push({
     icon: '🍝',
     title: 'Les glucides : ton carburant, pas ton ennemi',
-    text: 'Oublie "pas de glucides le soir" ou "les pâtes font grossir". Ce qui fait grossir, c\'est le surplus calorique total, pas les glucides en eux-mêmes. Une portion de riz le soir ne fait grossir personne qui mange à son maintien.'
+    text: 'Oublie les idées reçues sur les glucides le soir ou les pâtes qui font grossir. Ce qui fait grossir, c\'est le surplus calorique total, pas les glucides en eux-mêmes. Une portion de riz le soir ne fait grossir personne qui mange à son maintien.'
   });
 
   blocks.push({
     icon: '🥩',
     title: 'Les protéines : importantes, mais pas magiques',
-    text: 'Entre <strong>1,6 et 2,2 g par kilo</strong>, tu as tout ce qu\'il faut. Au-delà, ton corps élimine l\'excès — il ne construit pas plus de muscle pour autant. Une fois dans cette fourchette, concentre-toi sur le reste.'
+    text: 'Entre <strong>1,6 et 2,2 g par kilo</strong>, tu as tout ce qu\'il faut. Au-delà, ton corps élimine l\'excès. Il ne construit pas plus de muscle pour autant. Une fois dans cette fourchette, concentre-toi sur le reste.'
   });
 
   if (steps < 6000) {
