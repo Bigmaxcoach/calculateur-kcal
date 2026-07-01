@@ -1174,32 +1174,26 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu, compte) {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var actions = {
-    'btn1': function(){ nextStep(1); },
-    'btn2': function(){ nextStep(2); },
-    'btn3': function(){ nextStep(3); },
-    'btn4': function(){ nextStep(4); },
-    'btn5': function(){ nextStep(5); },
-    'btn6': function(){ nextStep(6); },
-    'btn7': function(){ nextStep(7); },
-    'back2': function(){ prevStep(2); },
-    'back3': function(){ prevStep(3); },
-    'back4': function(){ prevStep(4); },
-    'back5': function(){ prevStep(5); },
-    'back6': function(){ prevStep(6); },
-    'back7': function(){ prevStep(7); },
-    'btn8': function(){ calculateAndShow(); },
-    'back8': function(){ prevStep(8); }
+  var map = {
+    btn1: function(){ nextStep(1); },
+    btn2: function(){ nextStep(2); },
+    btn3: function(){ nextStep(3); },
+    btn4: function(){ nextStep(4); },
+    btn5: function(){ nextStep(5); },
+    btn6: function(){ nextStep(6); },
+    btn7: function(){ nextStep(7); },
+    btn8: function(){ calculateAndShow(); },
+    back2: function(){ prevStep(2); },
+    back3: function(){ prevStep(3); },
+    back4: function(){ prevStep(4); },
+    back5: function(){ prevStep(5); },
+    back6: function(){ prevStep(6); },
+    back7: function(){ prevStep(7); },
+    back8: function(){ prevStep(8); }
   };
-  Object.keys(actions).forEach(function(id) {
+  Object.keys(map).forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('click', actions[id]);
-      el.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        actions[id]();
-      });
-    }
+    if (el) el.addEventListener('click', map[id]);
   });
 });
 </script>
