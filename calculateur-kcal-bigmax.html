@@ -805,6 +805,25 @@
   <button type="button" class="btn-back" id="back7">← Retour</button>
 </div>
 
+
+<!-- STEP 8 : Comptage calories -->
+<div class="step" id="step8">
+  <div class="step-title">Tu comptes déjà tes calories ?</div>
+  <div class="step-sub">Ta réponse change ce qu'on va t'afficher. Sois honnête — c'est pour ton résultat.</div>
+  <div class="radio-group">
+    <div class="radio-card">
+      <input type="radio" name="compte" id="cp_oui" value="oui">
+      <label for="cp_oui"><span class="icon">✅</span><span class="card-text"><span>Oui, je suis mes calories</span><span class="card-sub">Tu as déjà une idée de ce que tu manges</span></span></label>
+    </div>
+    <div class="radio-card">
+      <input type="radio" name="compte" id="cp_non" value="non">
+      <label for="cp_non"><span class="icon">❌</span><span class="card-text"><span>Non, je ne compte pas</span><span class="card-sub">Tu n'as jamais suivi tes apports</span></span></label>
+    </div>
+  </div>
+  <button type="button" class="btn-next" id="btn8">Voir mon résultat →</button>
+  <button type="button" class="btn-back" id="back8">← Retour</button>
+</div>
+
 <!-- RESULT -->
 <div id="result">
 
@@ -871,7 +890,7 @@
     <div class="cta-block-title">Tu veux mettre<br>ces chiffres en pratique ?</div>
     <div class="cta-block-sub">Un appel de 30 min, gratuit, pour faire le point sur tes objectifs et savoir exactement par où commencer.</div>
     <a class="btn-cta-main" href="https://calendly.com/bigmax-coaching/30min" target="_blank">Parlons de tes objectifs →</a>
-    <div class="cta-secondary">Tu as une question d'abord ? <a href="https://wa.me/33766011825?text=Salut%20Max%2C%20j%27ai%20utilis%C3%A9%20ton%20calculateur%20et%20j%27ai%20des%20questions%20!" target="_blank">Écris-moi sur WhatsApp</a></div>
+    <div class="cta-secondary">Tu as une question d'abord ?<br><a href="https://wa.me/33766011825?text=Salut%20Max%2C%20j%27ai%20utilis%C3%A9%20ton%20calculateur%20et%20j%27ai%20des%20questions%20!" target="_blank">Écris-moi sur WhatsApp</a></div>
   </div>
 
   <!-- EDU -->
@@ -892,7 +911,7 @@
 
 <script>
 let currentStep = 1;
-const totalSteps = 7;
+const totalSteps = 8;
 let calcData = {};
 
 function updateProgress(step) {
@@ -936,6 +955,7 @@ function validateStep(step) {
   if (step === 4 && !document.querySelector('input[name="muscu"]:checked')) { alert('Réponds à la question sur la musculation.'); return false; }
   if (step === 5 && !document.querySelector('input[name="cardio"]:checked')) { alert('Réponds à la question sur le cardio.'); return false; }
   if (step === 7 && !document.querySelector('input[name="objectif"]:checked')) { alert('Sélectionne ton objectif.'); return false; }
+  if (step === 8 && !document.querySelector('input[name="compte"]:checked')) { alert('Réponds à la question sur le comptage.'); return false; }
   return true;
 }
 
@@ -985,7 +1005,8 @@ function calculateAndShow() {
   tdee += (extraSteps / 1000) * (poids * 0.5);
 
   const maintenance = Math.round(tdee);
-  const deficit = Math.round(maintenance * 0.82);
+  const compte = document.querySelector('input[name="compte"]:checked') ? document.querySelector('input[name="compte"]:checked').value : 'non';
+  const deficit = compte === 'oui' ? Math.round(maintenance - 250) : maintenance;
   const surplus = Math.round(maintenance + 100);
 
   calcData = { poids, objectif, maintenance, deficit, surplus };
@@ -997,7 +1018,11 @@ function calculateAndShow() {
   const sw = document.getElementById('scenarios-wrap');
   sw.innerHTML = '';
   if (objectif === 'seche') {
-    sw.innerHTML = '<div class="scenario-card highlight"><div class="scenario-icon">🔥</div><div class="scenario-text"><div class="scenario-name">Déficit recommandé</div><div class="scenario-kcal">' + deficit.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">-' + (maintenance - deficit) + ' kcal/j · environ -0,5 kg/sem</div></div></div><div class="scenario-card"><div class="scenario-icon">⚖️</div><div class="scenario-text"><div class="scenario-name">Maintien</div><div class="scenario-kcal">' + maintenance.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">Ton point de référence</div></div></div>';
+    if (compte === 'non') {
+      sw.innerHTML = '<div class="scenario-card highlight"><div class="scenario-icon">🎯</div><div class="scenario-text"><div class="scenario-name">Ton objectif — étape 1</div><div class="scenario-kcal">' + maintenance.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">Commence ici. Mange à ton maintien 2 à 3 semaines avant de baisser.</div></div></div><div class="scenario-card"><div class="scenario-icon">🔥</div><div class="scenario-text"><div class="scenario-name">Déficit — étape 2 (plus tard)</div><div class="scenario-kcal">' + (maintenance - 250).toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">-250 kcal/j · quand tu seras à l'aise avec le maintien</div></div></div>';
+    } else {
+      sw.innerHTML = '<div class="scenario-card highlight"><div class="scenario-icon">🔥</div><div class="scenario-text"><div class="scenario-name">Déficit recommandé</div><div class="scenario-kcal">' + deficit.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">-250 kcal/j · environ -0,3 kg/sem</div></div></div><div class="scenario-card"><div class="scenario-icon">⚖️</div><div class="scenario-text"><div class="scenario-name">Maintien</div><div class="scenario-kcal">' + maintenance.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">Ton point de référence</div></div></div>';
+    }
   } else if (objectif === 'prise') {
     sw.innerHTML = '<div class="scenario-card"><div class="scenario-icon">⚖️</div><div class="scenario-text"><div class="scenario-name">Maintien</div><div class="scenario-kcal">' + maintenance.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">En dessous, pas de prise de muscle</div></div></div><div class="scenario-card highlight"><div class="scenario-icon">💪</div><div class="scenario-text"><div class="scenario-name">Surplus lean</div><div class="scenario-kcal">' + surplus.toLocaleString('fr-FR') + ' kcal</div><div class="scenario-note">+' + (surplus - maintenance) + ' kcal/j · prise propre</div></div></div>';
   } else {
@@ -1012,7 +1037,7 @@ function calculateAndShow() {
   // Edu blocks
   const ec = document.getElementById('edu-blocks-container');
   ec.innerHTML = '';
-  getEduBlocks(objectif, maintenance, poids, steps, muscu).forEach(b => {
+  getEduBlocks(objectif, maintenance, poids, steps, muscu, compte).forEach(b => {
     ec.innerHTML += '<div class="edu-card"><span class="edu-card-icon">' + b.icon + '</span><div class="edu-card-title">' + b.title + '</div><p>' + b.text + '</p></div>';
   });
 
@@ -1048,35 +1073,43 @@ function updateMacros() {
   document.getElementById('gluc-bar').style.width = Math.max(5, glucPct) + '%';
 }
 
-function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
+function getEduBlocks(objectif, maintenance, poids, steps, muscu, compte) {
   const blocks = [];
 
-  blocks.push({
-    icon: '🏁',
-    title: 'Le maintien d\'abord, toujours',
-    text: 'Tu dépenses environ <strong>' + maintenance.toLocaleString('fr-FR') + ' kcal par jour</strong>. C\'est ta base. Si tu ne l\'as jamais mesuré, commence ici : mange à ton maintien 2 à 3 semaines et observe comment ton corps réagit avant de toucher aux calories.'
-  });
+  if (compte === 'non' && objectif === 'seche') {
+    blocks.push({
+      icon: '🎯',
+      title: 'Avant de couper, apprends à compter',
+      text: 'Tu veux perdre du gras mais tu ne comptes pas encore tes calories. C’est normal — mais griller les étapes va te brûler les ailes. Commence par manger à ton maintien (<strong>' + maintenance.toLocaleString('fr-FR') + ' kcal</strong>) pendant 2 à 3 semaines. Observe comment ton corps réagit. Ensuite seulement, baisse de 150 à 250 kcal.'
+    });
+  } else {
+    blocks.push({
+      icon: '🏁',
+      title: 'Le maintien d’abord, toujours',
+      text: 'Tu dépenses environ <strong>' + maintenance.toLocaleString('fr-FR') + ' kcal par jour</strong>. C’est ta base. Si tu ne mesures pas encore tes calories, commence ici : mange à ton maintien 2 à 3 semaines et observe comment ton corps réagit avant de bouger les curseurs.'
+    });
+  }
 
   if (objectif === 'seche') {
     blocks.push({
       icon: '📉',
       title: 'Un déficit, pas une punition',
-      text: 'Pour perdre du gras, tu n\'as pas à souffrir. Un déficit de 15 à 20 % est largement suffisant. Les régimes agressifs sont durs, fatiguants et impossibles à tenir sur la durée. Tu risques de perdre du muscle — et de tout remanger derrière.'
+      text: 'Pour perdre du gras, tu n’as pas à souffrir. Un déficit de 15 à 20 % est largement suffisant. Les régimes agressifs sont durs, fatiguants et impossibles à tenir sur la durée. Tu risques de perdre du muscle — et de tout remanger derrière.'
     });
     blocks.push({
       icon: '⚖️',
       title: 'Surveille ton poids, mais pas trop',
-      text: 'Le poids peut monter et descendre d\'un jour à l\'autre — eau, sel, digestion. C\'est normal. Ne réagis pas avant 2 semaines complètes. Regarde la tendance sur la durée, pas le chiffre du matin.'
+      text: 'Le poids monte et descend selon l'eau, le sel, la digestion. C'est normal. Ne réagis pas avant 2 semaines complètes. Regarde la tendance, pas le chiffre du matin.'
     });
     blocks.push({
       icon: '🏃',
-      title: 'Le cardio n\'est pas ton ennemi',
-      text: 'En sèche, le cardio t\'aide à créer un déficit sans couper encore plus dans l\'assiette. Mais surtout, ton cœur est ta pompe — prends-en soin. Un bon métabolisme et une bonne santé cardiaque, ça se construit maintenant.'
+      title: 'Le cardio n’est pas ton ennemi',
+      text: 'En sèche, le cardio aide à créer un déficit sans trop couper dans ton assiette. Et surtout, ton coeur est ta pompe — prends-en soin. Un bon métabolisme se construit maintenant.'
     });
     blocks.push({
       icon: '🍕',
       title: 'Resto, barbecue, glace (plaisir)',
-      text: 'Un repas au restaurant ne sabote pas ta progression. C\'est la semaine entière qui compte, pas le vendredi soir. Si tu es dans tes calories sur la semaine, un repas festif ne change rien. La culpabilité peut te faire déraper bien plus que le repas lui-même. Ne change pas ton plan le lendemain d\'un écart. Mange — et ça va bien se passer.'
+      text: 'Un repas au restaurant ne sabote pas ta progression. C’est la semaine entière qui compte, pas le vendredi soir. Si tu es dans tes calories sur la semaine, un repas festif ne change rien. La culpabilité peut te faire déraper bien plus que le repas lui-même. Ne change pas ton plan le lendemain d’un écart. Mange — et ça va bien se passer.'
     });
   }
 
@@ -1084,16 +1117,16 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
     blocks.push({
       icon: '📈',
       title: 'Step by step — 100 kcal à la fois',
-      text: 'Commence avec <strong>+100 kcal par semaine</strong> au-dessus de ton maintien et monte progressivement. Aller trop vite, c\'est accumuler du gras. La prise de muscle demande de la patience — elle ne se fait pas en 3 semaines.'
+      text: 'Commence avec <strong>+100 kcal par semaine</strong> au-dessus de ton maintien et monte progressivement. Aller trop vite, c’est accumuler du gras. La prise de muscle demande de la patience — elle ne se fait pas en 3 semaines.'
     });
     blocks.push({
       icon: '⚖️',
-      title: 'La balance n\'est pas ton seul indicateur',
-      text: 'Le poids monte — c\'est bien, mais ce n\'est pas la seule variable à surveiller. Ton physique peut s\'améliorer même si la balance bouge peu. En revanche, si tu prends <strong>plus de 750 g par mois</strong>, il y a un problème : tu stockes trop de gras.'
+      title: 'La balance n’est pas ton seul indicateur',
+      text: 'Le poids monte — c’est bien, mais ce n’est pas la seule variable à surveiller. Ton physique peut s’améliorer même si la balance bouge peu. En revanche, si tu prends <strong>plus de 750 g par mois</strong>, il y a un problème : tu stockes trop de gras.'
     });
     blocks.push({
       icon: '🏃',
-      title: 'Le cardio n\'est pas ton ennemi',
+      title: 'Le cardio n’est pas ton ennemi',
       text: 'Même en prise de muscle, le cardio reste important. Ton cœur est ta pompe — prends-en soin. Les habitudes bâties maintenant seront plus simples à maintenir en déficit. Ne le supprime pas.'
     });
     blocks.push({
@@ -1106,8 +1139,8 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
   if (objectif === 'maintien') {
     blocks.push({
       icon: '⚖️',
-      title: 'Le poids varie — c\'est normal',
-      text: 'Ton poids peut monter ou descendre d\'un jour à l\'autre selon l\'eau, le sel, la digestion. Ne réagis pas avant 2 semaines complètes. Regarde la tendance, pas le chiffre du matin.'
+      title: 'Le poids varie — c’est normal',
+      text: 'Ton poids monte ou descend selon l'eau, le sel, la digestion. Ne réagis pas avant 2 semaines complètes. Regarde la tendance, pas le chiffre du matin.'
     });
     blocks.push({
       icon: '🏃',
@@ -1119,20 +1152,20 @@ function getEduBlocks(objectif, maintenance, poids, steps, muscu) {
   blocks.push({
     icon: '🍝',
     title: 'Les glucides : ton carburant, pas ton ennemi',
-    text: 'Oublie les idées reçues sur les glucides le soir ou les pâtes qui font grossir. Ce qui fait grossir, c\'est le surplus calorique total, pas les glucides en eux-mêmes. Une portion de riz le soir ne fait grossir personne qui mange à son maintien.'
+    text: 'Oublie les idées reçues sur les glucides le soir ou les pâtes qui font grossir. Ce qui fait grossir, c’est le surplus calorique total, pas les glucides en eux-mêmes. Une portion de riz le soir ne fait grossir personne qui mange à son maintien.'
   });
 
   blocks.push({
     icon: '🥩',
     title: 'Les protéines : importantes, mais pas magiques',
-    text: 'Entre <strong>1,6 et 2,2 g par kilo</strong>, tu as tout ce qu\'il faut. Au-delà, ton corps élimine l\'excès. Il ne construit pas plus de muscle pour autant. Une fois dans cette fourchette, concentre-toi sur le reste.'
+    text: 'Entre <strong>1,6 et 2,2 g par kilo</strong>, tu as tout ce qu'il faut. Au-delà, ton corps élimine l'excès. Il ne construit pas plus de muscle pour autant. Une fois dans cette fourchette, concentre-toi sur le reste.'
   });
 
   if (steps < 6000) {
     blocks.push({
       icon: '👟',
       title: 'Tes pas comptent plus que tu ne le penses',
-      text: 'Tu marches peu (' + parseInt(steps).toLocaleString('fr-FR') + ' pas/jour). Ajouter <strong>3 000 à 5 000 pas</strong> de plus peut représenter 150 à 250 kcal de dépense supplémentaire — sans aucun effort sportif. C\'est souvent plus efficace qu\'une séance de cardio supplémentaire.'
+      text: 'Tu marches peu (' + parseInt(steps).toLocaleString('fr-FR') + ' pas/jour). Ajouter <strong>3 000 à 5 000 pas</strong> de plus peut représenter 150 à 250 kcal de dépense supplémentaire — sans aucun effort sportif. C’est souvent plus efficace qu’une séance de cardio supplémentaire.'
     });
   }
 
@@ -1148,13 +1181,15 @@ document.addEventListener('DOMContentLoaded', function() {
     'btn4': function(){ nextStep(4); },
     'btn5': function(){ nextStep(5); },
     'btn6': function(){ nextStep(6); },
-    'btn7': function(){ calculateAndShow(); },
+    'btn7': function(){ nextStep(7); },
     'back2': function(){ prevStep(2); },
     'back3': function(){ prevStep(3); },
     'back4': function(){ prevStep(4); },
     'back5': function(){ prevStep(5); },
     'back6': function(){ prevStep(6); },
-    'back7': function(){ prevStep(7); }
+    'back7': function(){ prevStep(7); },
+    'btn8': function(){ calculateAndShow(); },
+    'back8': function(){ prevStep(8); }
   };
   Object.keys(actions).forEach(function(id) {
     var el = document.getElementById(id);
